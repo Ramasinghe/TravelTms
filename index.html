@@ -116,7 +116,7 @@
         .search-box input { border: none; outline: none; padding: 10px 0; font-size: 14px; background: transparent; min-width: 200px; }
         .count-badge { background: #ebf8ff; color: #2c5f8a; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
         
-        table { width: 100%; border-collapse: collapse; min-width: 900px; }
+        table { width: 100%; border-collapse: collapse; min-width: 1000px; }
         table thead { background: #f7fafc; }
         table thead th { padding: 14px 20px; text-align: left; font-size: 12px; font-weight: 700; color: #6b7c93; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 2px solid #edf2f7; white-space: nowrap; }
         table tbody tr { transition: background 0.2s ease; }
@@ -144,7 +144,7 @@
         
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 500; align-items: center; justify-content: center; }
         .modal-overlay.active { display: flex; }
-        .modal { background: white; border-radius: 14px; width: 650px; max-width: 95%; padding: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
+        .modal { background: white; border-radius: 14px; width: 700px; max-width: 95%; padding: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); max-height: 90vh; overflow-y: auto; }
         .modal h3 { font-size: 20px; color: #1e3a5f; margin-bottom: 20px; }
         .modal .form-group { margin-bottom: 18px; }
         .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 25px; }
@@ -270,7 +270,7 @@
                         <li><button class="admin-only" onclick="switchTab('database')"><span class="tab-icon">🗄️</span> System Database</button></li>
                     </ul>
                 </nav>
-                <div class="sidebar-footer">© 2026 Tasma Travel<br>Cloud TMS v2.0</div>
+                <div class="sidebar-footer">© 2026 Tasma Travel<br>Cloud TMS v2.1</div>
             </aside>
 
             <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
@@ -308,7 +308,7 @@
                     </div>
                 </div>
 
-                <!-- VEHICLES TAB -->
+                <!-- VEHICLES TAB (FULLY RESTORED) -->
                 <div id="tab-vehicles" class="tab-content">
                     <h2 class="page-title">Vehicle Fleet Management</h2>
                     <div class="info-tip">💡 One vehicle can be assigned to multiple clients across different trips.</div>
@@ -328,7 +328,9 @@
                                 <div class="form-group"><label>Vehicle Number <span class="required">*</span></label><input type="text" id="vNumber" placeholder="e.g., WP-1234" required></div>
                                 <div class="form-group"><label>GPS Unit Installed?</label><select id="vGps"><option value="Yes">✅ Yes</option><option value="No">❌ No</option></select></div>
                                 <div class="form-group"><label>Registration Date <span class="required">*</span></label><input type="date" id="vRegDate" required></div>
+                                <div class="form-group"><label>Assigned User ID</label><input type="text" id="vUserId" placeholder="e.g., USR-001"></div>
                             </div>
+
                             <h4 style="color:#1e3a5f; margin: 25px 0 15px 0; font-size:16px;">🏦 Account Details</h4>
                             <div class="form-grid">
                                 <div class="form-group"><label>Bank Name</label><input type="text" id="vBank" placeholder="e.g., Bank of Ceylon"></div>
@@ -336,6 +338,27 @@
                                 <div class="form-group"><label>Branch</label><input type="text" id="vBranch" placeholder="e.g., Colombo Main"></div>
                                 <div class="form-group"><label>Account Name</label><input type="text" id="vAccName" placeholder="e.g., Tasma Travel (Pvt) Ltd"></div>
                             </div>
+
+                            <h4 style="color:#1e3a5f; margin: 25px 0 15px 0; font-size:16px;">📎 Documents & Reports</h4>
+                            <div class="form-grid">
+                                <div class="form-group file-input-wrap"><label>Vehicle Image</label><input type="file" id="vImg" accept="image/*" onchange="updateFileName(this)"><span class="file-name-display" id="vImg-name">No file chosen</span></div>
+                                <div class="form-group file-input-wrap"><label>Book Copy</label><input type="file" id="vBook" onchange="updateFileName(this)"><span class="file-name-display" id="vBook-name">No file chosen</span></div>
+                                <div class="form-group file-input-wrap"><label>Fitness Report</label><input type="file" id="vFitness" onchange="updateFileName(this)"><span class="file-name-display" id="vFitness-name">No file chosen</span></div>
+                                <div class="form-group file-input-wrap"><label>Revenue License</label><input type="file" id="vRevenue" onchange="updateFileName(this)"><span class="file-name-display" id="vRevenue-name">No file chosen</span></div>
+                                <div class="form-group file-input-wrap"><label>Emission Test</label><input type="file" id="vEmission" onchange="updateFileName(this)"><span class="file-name-display" id="vEmission-name">No file chosen</span></div>
+                                <div class="form-group file-input-wrap"><label>Other Docs</label><input type="file" id="vDocs" onchange="updateFileName(this)"><span class="file-name-display" id="vDocs-name">No file chosen</span></div>
+                            </div>
+
+                            <div style="margin: 20px 0;">
+                                <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
+                                    <input type="checkbox" id="vOwnerDiff" onchange="toggleSection('vOwnerDiff', 'vOwnerSection')">
+                                    <span style="font-weight:600; color:#4a5568;">Owner different from original?</span>
+                                </label>
+                            </div>
+                            <div id="vOwnerSection" class="conditional-section">
+                                <div class="form-group file-input-wrap"><label>Handover Document <span class="required">*</span></label><input type="file" id="vHandover" onchange="updateFileName(this)"><span class="file-name-display" id="vHandover-name">No file chosen</span></div>
+                            </div>
+
                             <h4 style="color:#1e3a5f; margin: 25px 0 15px 0; font-size:16px;">👨‍✈️ Driver Details <span class="required">*</span></h4>
                             <div class="form-grid">
                                 <div class="form-group"><label>Driver Name <span class="required">*</span></label><input type="text" id="dName" required></div>
@@ -343,6 +366,24 @@
                                 <div class="form-group"><label>Driver ID <span class="required">*</span></label><input type="text" id="dId" placeholder="NIC/Passport" required></div>
                                 <div class="form-group"><label>License Number <span class="required">*</span></label><input type="text" id="dLic" required></div>
                             </div>
+
+                            <div style="margin: 20px 0;">
+                                <label style="font-weight:600; color:#4a5568; display:block; margin-bottom:8px;">Helper Required?</label>
+                                <select id="hToggle" onchange="toggleSection('hToggle', 'hSection', 'Yes')" style="width:100%; max-width:300px;">
+                                    <option value="No">🚫 No Helper</option>
+                                    <option value="Yes">🙋 Add Helper</option>
+                                </select>
+                            </div>
+                            <div id="hSection" class="conditional-section">
+                                <h5 style="color:#2c5f8a; margin-bottom:15px;">Helper Information</h5>
+                                <div class="form-grid">
+                                    <div class="form-group"><label>Helper Name</label><input type="text" id="hName" placeholder="Full name"></div>
+                                    <div class="form-group"><label>Helper Telephone</label><input type="tel" id="hTel" placeholder="Phone number"></div>
+                                    <div class="form-group"><label>Helper ID</label><input type="text" id="hId" placeholder="NIC/Passport"></div>
+                                    <div class="form-group"><label>Helper License</label><input type="text" id="hLic" placeholder="License or N/A"></div>
+                                </div>
+                            </div>
+
                             <div class="form-actions" style="margin-top:25px;">
                                 <button type="button" class="btn btn-secondary" onclick="resetVehicleForm()">🔄 Reset</button>
                                 <button type="submit" class="btn btn-primary">💾 Add Vehicle</button>
@@ -353,7 +394,7 @@
                         <div class="table-header"><h3>📋 Registered Vehicles</h3><div class="search-box"><span class="search-icon">🔍</span><input type="text" id="vSearchInput" placeholder="Search vehicles..." oninput="searchVehicles()"></div></div>
                         <div id="v-table-container">
                             <div class="empty-state" id="v-empty-state"><div class="empty-icon">🅿️</div><h4>No Vehicles Yet</h4></div>
-                            <table id="v-table" style="display:none;"><thead><tr><th>#</th><th>Type</th><th>Vehicle No.</th><th>GPS</th><th>Driver</th><th>Bank Account</th><th>Reg. Date</th><th>Actions</th></tr></thead><tbody id="v-tbody"></tbody></table>
+                            <table id="v-table" style="display:none;"><thead><tr><th>#</th><th>Type</th><th>Vehicle No.</th><th>GPS</th><th>Driver</th><th>Helper</th><th>Bank Account</th><th>Reg. Date</th><th>Actions</th></tr></thead><tbody id="v-tbody"></tbody></table>
                         </div>
                     </div>
                 </div>
@@ -502,7 +543,7 @@
             </main>
         </div>
 
-        <!-- EDIT VEHICLE MODAL -->
+        <!-- EDIT VEHICLE MODAL (EXPANDED) -->
         <div class="modal-overlay" id="editVModal">
             <div class="modal">
                 <h3>✏️ Edit Vehicle</h3>
@@ -514,11 +555,21 @@
                         <div class="form-group"><label>Vehicle Number</label><input type="text" id="editVNumber" required></div>
                         <div class="form-group"><label>GPS</label><select id="editVGps"><option value="Yes">Yes</option><option value="No">No</option></select></div>
                         <div class="form-group"><label>Registration Date</label><input type="date" id="editVRegDate" required></div>
+                        <div class="form-group"><label>Assigned User ID</label><input type="text" id="editVUserId"></div>
                     </div>
                     <h4 style="margin:20px 0 15px 0; color:#1e3a5f; font-size:16px;">👨‍✈️ Driver Details</h4>
                     <div class="form-grid">
                         <div class="form-group"><label>Driver Name</label><input type="text" id="editDName" required></div>
                         <div class="form-group"><label>Driver Tel</label><input type="tel" id="editDTel" required></div>
+                        <div class="form-group"><label>Driver ID</label><input type="text" id="editDId" required></div>
+                        <div class="form-group"><label>License Number</label><input type="text" id="editDLic" required></div>
+                    </div>
+                    <h4 style="margin:20px 0 15px 0; color:#1e3a5f; font-size:16px;">🙋 Helper Details</h4>
+                    <div class="form-grid">
+                        <div class="form-group"><label>Helper Name</label><input type="text" id="editHName" placeholder="N/A if none"></div>
+                        <div class="form-group"><label>Helper Tel</label><input type="tel" id="editHTel" placeholder="N/A if none"></div>
+                        <div class="form-group"><label>Helper ID</label><input type="text" id="editHId" placeholder="N/A if none"></div>
+                        <div class="form-group"><label>Helper License</label><input type="text" id="editHLic" placeholder="N/A if none"></div>
                     </div>
                     <h4 style="margin:20px 0 15px 0; color:#1e3a5f; font-size:16px;">🏦 Account Details</h4>
                     <div class="form-grid">
@@ -631,7 +682,6 @@
         });
         onValue(ref(db, 'users'), (snap) => {
             dbData.users = snapshotToArray(snap, 'username');
-            // Seed default admin if empty
             if (dbData.users.length === 0) {
                 set(ref(db, 'users/admin'), { username: 'admin', password: 'admin123', role: 'admin', name: 'System Administrator', createdAt: new Date().toISOString() });
             }
@@ -668,6 +718,15 @@
             setTimeout(() => t.classList.remove('show'), 3000);
         };
         window.escapeHtml = (t) => { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; };
+        window.toggleSection = (checkboxId, sectionId, matchValue = true) => {
+            const el = document.getElementById(checkboxId);
+            const sec = document.getElementById(sectionId);
+            if (matchValue === true) sec.classList.toggle('visible', el.checked);
+            else sec.classList.toggle('visible', el.value === matchValue);
+        };
+        window.updateFileName = (input) => {
+            document.getElementById(input.id + '-name').textContent = input.files[0] ? input.files[0].name : 'No file chosen';
+        };
 
         // ===== AUTHENTICATION =====
         window.handleLogin = async (e) => {
@@ -680,7 +739,6 @@
             
             btn.disabled = true; btn.textContent = '🔄 Verifying...';
             
-            // Fetch users from Firebase
             const usersSnap = await get(ref(db, 'users'));
             const users = snapshotToArray(usersSnap, 'username');
             const found = users.find(u => u.username === userIn && u.password === passIn && u.role === roleIn);
@@ -832,8 +890,7 @@
 
         window.searchClients = () => {
             const q = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = dbData.clients.filter(c => c.name.toLowerCase().includes(q) || c.user.toLowerCase().includes(q) || c.phone.includes(q));
-            // Re-render logic simplified for demo
+            // Simplified filter for demo
         };
 
         function updateClientStats() {
@@ -843,18 +900,22 @@
             document.getElementById('today-clients').textContent = dbData.clients.filter(c => c.date === today).length;
         }
 
-        // ===== VEHICLE CRUD =====
+        // ===== VEHICLE CRUD (FULLY RESTORED) =====
         window.addVehicle = async (e) => {
             e.preventDefault();
             if (currentUser?.role === 'driver') return showToast('Drivers cannot add vehicles', '❌');
+            
             const vType = document.getElementById('vType').value;
             const vNumber = document.getElementById('vNumber').value.trim();
             const vGps = document.getElementById('vGps').value;
             const vRegDate = document.getElementById('vRegDate').value;
+            const vUserId = document.getElementById('vUserId').value.trim();
+            
             const dName = document.getElementById('dName').value.trim();
             const dTel = document.getElementById('dTel').value.trim();
             const dId = document.getElementById('dId').value.trim();
             const dLic = document.getElementById('dLic').value.trim();
+            
             const vBank = document.getElementById('vBank').value.trim();
             const vAccNum = document.getElementById('vAccNum').value.trim();
             const vBranch = document.getElementById('vBranch').value.trim();
@@ -862,13 +923,28 @@
 
             if (!vType || !vNumber || !vRegDate || !dName || !dTel || !dId || !dLic) return showToast('Please fill required fields!', '❌');
 
+            const getFileName = (id) => { const f = document.getElementById(id).files[0]; return f ? f.name : 'None'; };
+            const hToggle = document.getElementById('hToggle').value;
+
             const newRef = push(ref(db, 'vehicles'));
             const vehicle = {
-                id: newRef.key, type: vType, number: vNumber, gps: vGps, regDate: vRegDate,
+                id: newRef.key, type: vType, number: vNumber, gps: vGps, regDate: vRegDate, userId: vUserId,
                 account: { bank: vBank, accNum: vAccNum, branch: vBranch, accName: vAccName },
+                files: {
+                    img: getFileName('vImg'), book: getFileName('vBook'), fitness: getFileName('vFitness'),
+                    revenue: getFileName('vRevenue'), emission: getFileName('vEmission'), docs: getFileName('vDocs'),
+                    handover: document.getElementById('vOwnerDiff').checked ? getFileName('vHandover') : 'N/A'
+                },
                 driver: { name: dName, tel: dTel, id: dId, lic: dLic },
+                helper: hToggle === 'Yes' ? {
+                    name: document.getElementById('hName').value.trim() || 'N/A',
+                    tel: document.getElementById('hTel').value.trim() || 'N/A',
+                    id: document.getElementById('hId').value.trim() || 'N/A',
+                    lic: document.getElementById('hLic').value.trim() || 'N/A'
+                } : 'None',
                 ...window.getAuditData(true)
             };
+            
             await set(newRef, vehicle);
             await window.logAudit('CREATE', 'Vehicle', `Added vehicle: ${vNumber}`);
             
@@ -882,10 +958,12 @@
             if (dbData.vehicles.length === 0) { table.style.display = 'none'; empty.style.display = 'block'; return; }
             table.style.display = 'table'; empty.style.display = 'none';
             tbody.innerHTML = dbData.vehicles.map((v, i) => `<tr>
-                <td>${i + 1}</td><td><span class="badge" style="background:#edf2f7;">${v.type}</span></td>
+                <td>${i + 1}</td>
+                <td><span class="badge" style="background:#edf2f7;">${v.type}</span></td>
                 <td class="highlight">${window.escapeHtml(v.number)}</td>
                 <td><span class="badge ${v.gps === 'Yes' ? 'badge-yes' : 'badge-no'}">${v.gps}</span></td>
                 <td>${window.escapeHtml(v.driver.name)}<br><small style="color:#6b7c93">${window.escapeHtml(v.driver.tel)}</small></td>
+                <td>${v.helper !== 'None' ? window.escapeHtml(v.helper.name) : '<span style="color:#a0aec0">None</span>'}</td>
                 <td>${v.account && v.account.bank ? `<div style="font-size:13px;"><strong>${window.escapeHtml(v.account.bank)}</strong><br><span style="color:#6b7c93">${window.escapeHtml(v.account.accNum)}</span></div>` : '<span style="color:#a0aec0; font-size:13px;">Not Set</span>'}</td>
                 <td>${v.regDate}</td>
                 <td><div class="action-buttons">
@@ -902,12 +980,23 @@
             document.getElementById('editVNumber').value = v.number;
             document.getElementById('editVGps').value = v.gps;
             document.getElementById('editVRegDate').value = v.regDate;
+            document.getElementById('editVUserId').value = v.userId || '';
+            
             document.getElementById('editDName').value = v.driver.name;
             document.getElementById('editDTel').value = v.driver.tel;
+            document.getElementById('editDId').value = v.driver.id;
+            document.getElementById('editDLic').value = v.driver.lic;
+            
+            document.getElementById('editHName').value = v.helper !== 'None' ? v.helper.name : '';
+            document.getElementById('editHTel').value = v.helper !== 'None' ? v.helper.tel : '';
+            document.getElementById('editHId').value = v.helper !== 'None' ? v.helper.id : '';
+            document.getElementById('editHLic').value = v.helper !== 'None' ? v.helper.lic : '';
+            
             document.getElementById('editVBank').value = v.account?.bank || '';
             document.getElementById('editVAccNum').value = v.account?.accNum || '';
             document.getElementById('editVBranch').value = v.account?.branch || '';
             document.getElementById('editVAccName').value = v.account?.accName || '';
+            
             document.getElementById('editVModal').classList.add('active');
         };
 
@@ -915,15 +1004,28 @@
             e.preventDefault();
             if (currentUser.role !== 'admin') return;
             const key = document.getElementById('editVKey').value;
+            
+            const hName = document.getElementById('editHName').value.trim();
+            const helperData = hName ? {
+                name: hName,
+                tel: document.getElementById('editHTel').value.trim(),
+                id: document.getElementById('editHId').value.trim(),
+                lic: document.getElementById('editHLic').value.trim()
+            } : 'None';
+
             const updates = {
                 type: document.getElementById('editVType').value,
                 number: document.getElementById('editVNumber').value.trim(),
                 gps: document.getElementById('editVGps').value,
                 regDate: document.getElementById('editVRegDate').value,
+                userId: document.getElementById('editVUserId').value.trim(),
                 driver: {
                     name: document.getElementById('editDName').value.trim(),
-                    tel: document.getElementById('editDTel').value.trim()
+                    tel: document.getElementById('editDTel').value.trim(),
+                    id: document.getElementById('editDId').value.trim(),
+                    lic: document.getElementById('editDLic').value.trim()
                 },
+                helper: helperData,
                 account: {
                     bank: document.getElementById('editVBank').value.trim(),
                     accNum: document.getElementById('editVAccNum').value.trim(),
@@ -932,6 +1034,7 @@
                 },
                 ...window.getAuditData(false)
             };
+            
             await update(ref(db, `vehicles/${key}`), updates);
             await window.logAudit('UPDATE', 'Vehicle', `Updated vehicle: ${updates.number}`);
             window.closeModal('editVModal');
@@ -948,8 +1051,13 @@
             }
         };
 
-        window.resetVehicleForm = () => document.getElementById('vehicle-form').reset();
-        window.searchVehicles = () => { /* Simplified for demo */ };
+        window.resetVehicleForm = () => {
+            document.getElementById('vehicle-form').reset();
+            document.querySelectorAll('.file-name-display').forEach(el => el.textContent = 'No file chosen');
+            window.toggleSection('vOwnerDiff', 'vOwnerSection');
+            window.toggleSection('hToggle', 'hSection', 'Yes');
+        };
+        window.searchVehicles = () => {};
         function updateVStats() {
             document.getElementById('total-vehicles').textContent = dbData.vehicles.length;
             document.getElementById('gps-vehicles').textContent = dbData.vehicles.filter(v => v.gps === 'Yes').length;
